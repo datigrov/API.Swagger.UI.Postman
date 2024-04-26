@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 @Service
 public class FacultyService implements FacultyInterface {
     private final HashMap<Long, Faculty> facultyServiceInfo = new HashMap<>();
-    private Long count = 0L;
+    private long nextId = 0L;
 
     @Override
     public Faculty createFaculty(Faculty faculty) {
+        faculty.setId(nextId++);
         facultyServiceInfo.put(faculty.getId(), faculty);
-        faculty.setId(count++);
         return faculty;
     }
 
@@ -28,7 +28,10 @@ public class FacultyService implements FacultyInterface {
 
     @Override
     public Faculty updateFaculty(long id, Faculty faculty) {
-        facultyServiceInfo.put(count, faculty);
+        if (facultyServiceInfo.containsKey(id)) {
+            return null;
+        }
+        facultyServiceInfo.put(id, faculty);
         return faculty;
     }
 

@@ -1,6 +1,6 @@
 package ru.hogwarts.school.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/student")
 public class StudentController {
+
     private StudentService studentService;
 
     public StudentController(StudentService studentService) {
@@ -24,25 +25,26 @@ public class StudentController {
 
     @GetMapping("{id}")
     public ResponseEntity<Student> getStudents(@PathVariable Long id) {
-        Student student = studentService.getStudent(id);
-        if (student == null) {
+        Student newStudent = studentService.getStudent(id);
+        if (newStudent == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(newStudent);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Student> updateStudents(@RequestBody Student student, @PathVariable Long id) {
-        Student updatedStudent = studentService.updateStudent(id, student);
-        if (updatedStudent == null) {
+        Student changeStudent = studentService.updateStudent(id, student);
+        if (changeStudent == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedStudent);
+        return ResponseEntity.ok(changeStudent);
     }
 
-    @DeleteMapping
-    public Student deliteStudents(@RequestBody Long id) {
-        return studentService.deleteStudent(id);
+    @DeleteMapping("{id}")
+    public ResponseEntity<Student> deleteStudents(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/age")

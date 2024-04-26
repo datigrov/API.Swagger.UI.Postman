@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService implements StudentInterface {
     private final HashMap<Long, Student> studentServiceInfo = new HashMap<>();
-    private long count = 0L;
+    private long nextId = 0L;
 
     @Override
     public Student createStudent(Student student) {
+        student.setId(nextId++);
         studentServiceInfo.put(student.getId(), student);
-        student.setId(count++);
         return student;
     }
 
@@ -25,6 +25,9 @@ public class StudentService implements StudentInterface {
 
     @Override
     public Student updateStudent(long id, Student student) {
+        if (!studentServiceInfo.containsKey(id)) {
+            return null;
+        }
         studentServiceInfo.put(id, student);
         return student;
     }

@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
@@ -25,20 +24,20 @@ public class FacultyController {
 
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFacultyes(@PathVariable Long id) {
-        Faculty faculty = facultyService.getFaculty(id);
-        if (faculty == null) {
+        Faculty newFaculty = facultyService.getFaculty(id);
+        if (newFaculty == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(faculty);
+        return ResponseEntity.ok(newFaculty);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Faculty> updateFacultyes(@RequestBody Faculty faculty, @PathVariable Long id) {
-        Faculty updatedFaculty = facultyService.updateFaculty(id, faculty);
-        if (updatedFaculty == null) {
+        Faculty changeFaculty = facultyService.updateFaculty(id, faculty);
+        if (changeFaculty == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(updatedFaculty);
+        return ResponseEntity.ok(changeFaculty);
     }
 
     @DeleteMapping("{id}")
