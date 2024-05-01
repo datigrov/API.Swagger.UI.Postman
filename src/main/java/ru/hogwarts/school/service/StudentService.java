@@ -1,47 +1,39 @@
 package ru.hogwarts.school.service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.interfaceUniversity.StudentInterface;
 import ru.hogwarts.school.model.Student;
-import java.util.HashMap;
+import ru.hogwarts.school.repository.StudentRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
-public class StudentService implements StudentInterface {
-    private final HashMap<Long, Student> studentServiceInfo = new HashMap<>();
-    private long nextId = 0L;
+public class StudentService{
 
-    @Override
+    @Autowired
+    private final StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
     public Student createStudent(Student student) {
-        student.setId(nextId++);
-        studentServiceInfo.put(student.getId(), student);
-        return student;
+        return studentRepository.save(student);
     }
 
-    @Override
-    public Student getStudent(long id) {
-        return studentServiceInfo.get(id);
+    public Student findStudent(long id) {
+        return studentRepository.getById(id);
     }
 
-    @Override
-    public Student updateStudent(long id, Student student) {
-        if (!studentServiceInfo.containsKey(id)) {
-            return null;
-        }
-        studentServiceInfo.put(id, student);
-        return student;
+    public Student editStudent(long id, Student student) {
+       return studentRepository.save(student);
     }
 
-    @Override
-    public Student deleteStudent(long id) {
-        return studentServiceInfo.remove(id);
+    public void deleteStudent(long id) {
+        studentRepository.deleteById(id);
     }
 
-    public List<Student> ageStudent(int age) {
-        return studentServiceInfo.values().stream().
-                filter(student -> student.getAge() ==age).
-                collect(Collectors.toList());
+    public List<Student> getAge(int age) {
+        return studentRepository.ageStudent(age);
     }
-
 
 }

@@ -1,8 +1,10 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.interfaceUniversity.FacultyInterface;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 
 
 import java.util.HashMap;
@@ -10,40 +12,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FacultyService implements FacultyInterface {
-    private final HashMap<Long, Faculty> facultyServiceInfo = new HashMap<>();
-    private long nextId = 0L;
+public class FacultyService{
 
-    @Override
+    @Autowired
+    private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
+
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(nextId++);
-        facultyServiceInfo.put(faculty.getId(), faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
-    @Override
-    public Faculty getFaculty(long id) {
-        return facultyServiceInfo.get(id);
+    public Faculty findFaculty(long id) {
+        return facultyRepository.getById(id);
     }
 
-    @Override
-    public Faculty updateFaculty(long id, Faculty faculty) {
-        if (facultyServiceInfo.containsKey(id)) {
-            return null;
-        }
-        facultyServiceInfo.put(id, faculty);
-        return faculty;
+    public Faculty editFaculty(long id, Faculty faculty) {
+        return facultyRepository.save(faculty);
     }
 
-    @Override
-    public Faculty deleteFaculty(long id) {
-        return facultyServiceInfo.remove(id);
+    public void deleteFaculty(long id) {
+        facultyRepository.deleteById(id);
     }
 
     public List<Faculty> facultyCollor(String collor) {
-        return facultyServiceInfo.values().
-                stream().filter(faculty -> faculty.getColor().equals(collor)).
-                collect(Collectors.toList());
+        return facultyRepository.facultyCollor(collor);
 
     }
 

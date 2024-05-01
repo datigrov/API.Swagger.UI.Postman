@@ -24,7 +24,7 @@ public class FacultyController {
 
     @GetMapping("{id}")
     public ResponseEntity<Faculty> getFacultyes(@PathVariable Long id) {
-        Faculty newFaculty = facultyService.getFaculty(id);
+        Faculty newFaculty = facultyService.findFaculty(id);
         if (newFaculty == null) {
             return ResponseEntity.notFound().build();
         }
@@ -33,7 +33,7 @@ public class FacultyController {
 
     @PutMapping("{id}")
     public ResponseEntity<Faculty> updateFacultyes(@RequestBody Faculty faculty, @PathVariable Long id) {
-        Faculty changeFaculty = facultyService.updateFaculty(id, faculty);
+        Faculty changeFaculty = facultyService.editFaculty(id, faculty);
         if (changeFaculty == null) {
             return ResponseEntity.notFound().build();
         }
@@ -46,7 +46,7 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping("/collor")
+    @RequestMapping
     public List<Faculty> collorsOfFaculty(@RequestParam String collor) {
         return facultyService.facultyCollor(collor);
     }
