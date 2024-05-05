@@ -38,7 +38,9 @@ public class FacultyService{
     }
 
     public List<Faculty> facultyCollor(String collor) {
-        return facultyRepository.facultyCollor(collor);
+        return facultyRepository.findAll().stream().
+                filter(faculty -> faculty.getColor()==collor).
+                collect(Collectors.toList());
 
     }
 
