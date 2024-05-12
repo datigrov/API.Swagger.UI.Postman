@@ -37,11 +37,15 @@ public class FacultyService{
         facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> facultyCollor(String collor) {
+    public List<Faculty> facultyColor(String color) {
         return facultyRepository.findAll().stream().
-                filter(faculty -> faculty.getColor()==collor).
+                filter(faculty -> faculty.getColor()==color).
                 collect(Collectors.toList());
 
+    }
+
+    public Faculty findByNameIgnoreCaseAndFindCollorIgnoreCase(String name, String color) {
+        return facultyRepository.findByNameIgnoreCaseAndFindColorIgnoreCase(name, color);
     }
 
 }
