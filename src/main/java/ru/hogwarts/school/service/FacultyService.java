@@ -9,6 +9,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,15 +38,19 @@ public class FacultyService{
         facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> facultyColor(String color) {
+    public List<Faculty> findColor(String color) {
         return facultyRepository.findAll().stream().
-                filter(faculty -> faculty.getColor()==color).
+                filter(faculty -> Objects.equals(faculty.getColor(), color)).
                 collect(Collectors.toList());
 
     }
 
-    public Faculty findByNameIgnoreCaseAndFindCollorIgnoreCase(String name, String color) {
-        return facultyRepository.findByNameIgnoreCaseAndFindColorIgnoreCase(name, color);
+    public Faculty findByNameIgnore(String name) {
+        return facultyRepository.findByNameIgnoreCase(name);
+    }
+
+    public Faculty findByColorIgnoreCase(String color) {
+        return facultyRepository.findByColorIgnoreCase(color);
     }
 
 }

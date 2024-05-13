@@ -13,11 +13,16 @@ public class Student {
     private String name;
     private int age;
 
-    @OneToMany
+    @ManyToOne
+    @JoinColumn(name = "faculty-id")
     private Faculty faculty;
 
     public Faculty getFaculty() {
         return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     public Student() {
