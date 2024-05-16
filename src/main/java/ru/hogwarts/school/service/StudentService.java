@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService{
 
-    @Autowired
     private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
@@ -33,14 +32,12 @@ public class StudentService{
         studentRepository.deleteById(id);
     }
 
-    public List<Student> getAge(Integer age) {
-        return studentRepository.findAll().stream().
-                filter(student -> student.getAge()==age).
-                collect(Collectors.toList());
-    }
-
     public List<Student> findByAgeBetween(int maxAge, int minAge) {
         return studentRepository.findByAgeBetween(maxAge, minAge);
+    }
+
+    public List<Student> getAllStudentOnUnivercity() {
+        return studentRepository.findAll();
     }
 
 }
