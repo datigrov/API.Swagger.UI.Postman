@@ -58,8 +58,4 @@ public class AvatarService {
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
-
-
-
-
 }
