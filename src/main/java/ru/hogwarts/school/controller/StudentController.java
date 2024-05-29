@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
@@ -67,7 +68,18 @@ public class StudentController {
         return ResponseEntity.ok(student.getFaculty());
     }
 
+    @GetMapping("/all_students")
+    public Integer getAllStudents() {
+        return studentService.getAllStudentsIn();
+    }
 
+    @GetMapping("/get_average")
+    public List<Student> getAverage() {
+        return studentService.getAverageStudents();
+    }
 
-
+    @GetMapping("/get_last")
+    public List<Student> getLast() {
+        return studentService.getLastStudentsOfUniversity();
+    }
 }

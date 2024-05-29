@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition
-public class DemoApiSwaggerPostmanApplication {
+public class  DemoApiSwaggerPostmanApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApiSwaggerPostmanApplication.class, args);
