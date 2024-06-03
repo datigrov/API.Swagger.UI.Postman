@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
+import ru.hogwarts.school.model.AvatarDTO;
 import ru.hogwarts.school.service.AvatarService;
 
 import java.io.IOException;
@@ -60,9 +61,9 @@ public class AvatarController {
     }
 
     @GetMapping(value = "/{id}/avatar/get_all_avatars")
-    public ResponseEntity<List<Avatar>> getAllAvatars(@RequestParam("page") Integer pageNumber,
-                                                      @RequestParam("size") Integer pageSize) {
-        List<Avatar> avatars = avatarService.getAll(pageNumber, pageSize);
+    public ResponseEntity<List<AvatarDTO>> getAllAvatars(@RequestParam("page") Integer pageNumber,
+                                                         @RequestParam("size") Integer pageSize) {
+        List<AvatarDTO> avatars = avatarService.getAll(pageNumber, pageSize);
         return ResponseEntity.ok(avatars);
     }
 }

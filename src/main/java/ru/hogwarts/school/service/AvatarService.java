@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
+import ru.hogwarts.school.model.AvatarDTO;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
 
@@ -23,10 +24,13 @@ public class AvatarService {
     private String avatarsDir;
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
+    private final AvatarDTO avatarDTO;
 
-    public AvatarService(AvatarRepository avatarRepository, StudentService studentService) {
+    public AvatarService(String avatarsDir, AvatarRepository avatarRepository, StudentService studentService, AvatarDTO avatarDTO) {
+        this.avatarsDir = avatarsDir;
         this.avatarRepository = avatarRepository;
         this.studentService = studentService;
+        this.avatarDTO = avatarDTO;
     }
 
     private String getExtensions(String fileName) {
@@ -61,8 +65,9 @@ public class AvatarService {
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
-    public List<Avatar> getAll(Integer pageNumber, Integer pageSize) {
+    public List<AvatarDTO> getAll(Integer pageNumber, Integer pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
-        return avatarRepository.findAll(pageRequest).getContent();
+        return avatarRepository.findAll(pageRequest).getContent()
+                .stream().map(AvatarDTO::fromAvatar).toList();
     }
 }
