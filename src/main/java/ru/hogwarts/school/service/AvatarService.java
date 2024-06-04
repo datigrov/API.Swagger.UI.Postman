@@ -20,17 +20,15 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Transactional
 public class AvatarService {
-    @Value("${path.to.avatars.folder}")
     private String avatarsDir;
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
-    private final AvatarDTO avatarDTO;
 
-    public AvatarService(String avatarsDir, AvatarRepository avatarRepository, StudentService studentService, AvatarDTO avatarDTO) {
+    public AvatarService(@Value("${path.to.avatars.folder}")String avatarsDir, AvatarRepository avatarRepository,
+                         StudentService studentService) {
         this.avatarsDir = avatarsDir;
         this.avatarRepository = avatarRepository;
         this.studentService = studentService;
-        this.avatarDTO = avatarDTO;
     }
 
     private String getExtensions(String fileName) {
