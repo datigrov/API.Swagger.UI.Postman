@@ -22,6 +22,7 @@ public class StudentService{
 
     public Student createStudent(Student student) {
         logger.info("Was invoked method for create student");
+        logger.debug("debug of create student");
         return studentRepository.save(student);
     }
 
@@ -37,6 +38,7 @@ public class StudentService{
 
     public void deleteStudent(Long id) {
         logger.info("Was invoked method for delete student");
+        logger.debug("debug of delete student");
         studentRepository.deleteById(id);
     }
 
