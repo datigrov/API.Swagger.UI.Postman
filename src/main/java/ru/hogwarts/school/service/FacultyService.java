@@ -3,16 +3,14 @@ package ru.hogwarts.school.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.interfaceUniversity.FacultyInterface;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +51,11 @@ public class FacultyService{
     public List<Faculty> findByNameOrFindByColor(String name, String color) {
         logger.info("Was invoked method for find name or color in faculty");
         return facultyRepository.findAllByNameIgnoreCaseOrColorIgnoreCase(name, color);
+    }
+
+    public String getLongerNameOfFaculty() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName).max(Comparator.comparingInt(String::length)).orElseThrow();
     }
 
 }

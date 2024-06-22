@@ -57,7 +57,7 @@ public class FacultyController {
 
     @GetMapping("/nameOrColor")
     public ResponseEntity<List<Faculty>> findByColorOrName(@RequestParam(required = false) String name,
-                                                               @RequestParam(required = false) String color) {
+                                                           @RequestParam(required = false) String color) {
         if ((name != null && !name.isBlank() && color != null && !color.isBlank())) {
             return ResponseEntity.ok(facultyService.findByNameOrFindByColor(name, color));
         }
@@ -72,5 +72,10 @@ public class FacultyController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(facultyService.findFaculty(id).getStudents());
+    }
+
+    @GetMapping("/getLongerName")
+    public String getLongerName() {
+        return facultyService.getLongerNameOfFaculty();
     }
 }
