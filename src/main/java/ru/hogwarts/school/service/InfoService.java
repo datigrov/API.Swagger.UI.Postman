@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.interfaceUniversity.InfoInterface;
 
+import java.util.stream.Stream;
+
 @Service
 public class InfoService implements InfoInterface {
 
@@ -23,7 +25,10 @@ public class InfoService implements InfoInterface {
     }
 
     public Integer getWholeSum() {
-        // int sum = Stream.iterate(1, a -> a +1) .limit(1_000_000) .reduce(0, (a, b) -> a + b );
+        int sum = Stream.iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b);
+        return sum;
 
     }
 
