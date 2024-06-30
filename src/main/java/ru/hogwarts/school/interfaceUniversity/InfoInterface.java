@@ -5,4 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 public interface InfoInterface {
     @Value("$(server.port)")
     Integer getNewPort();
+
+    Integer wholeSum();
 }
