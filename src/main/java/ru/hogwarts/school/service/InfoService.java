@@ -1,13 +1,12 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.interfaceUniversity.InfoInterface;
-
-import java.util.logging.Logger;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -17,6 +16,7 @@ public class InfoService implements InfoInterface {
 
     private ServerProperties serverProperties;
     private InfoInterface infoInterface;
+    Logger logger = LoggerFactory.getLogger(InfoService.class);
 
     @Autowired
     public InfoService(ServerProperties serverProperties) {
@@ -31,7 +31,6 @@ public class InfoService implements InfoInterface {
 
     @Override
     public Integer wholeSum() {
-        Logger logger = (Logger) LoggerFactory.getLogger(InfoService.class);
         int sum;
         long slowTime = System.currentTimeMillis();
         sum = Stream.iterate(1, a -> a + 1)
