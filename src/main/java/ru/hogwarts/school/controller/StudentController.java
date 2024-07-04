@@ -92,4 +92,10 @@ public class StudentController {
     public ResponseEntity<Double> getAverageAges() {
         return studentService.getAverageAgeStudents();
     }
+
+    @GetMapping("/print-parallel")
+    public List<String> getParallel() {
+        return studentService.parallelStudentsNames();
+    }
+
 }
