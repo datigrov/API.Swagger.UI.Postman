@@ -98,12 +98,15 @@ public class StudentService {
                 .limit(6).map(Student::getName).toList();
         synchronuzedStudent(synchronuzedNames.get(0));
         synchronuzedStudent(synchronuzedNames.get(1));
-        new Thread(() ->
-                synchronuzedStudent(synchronuzedNames.get(2)));
-        synchronuzedStudent(synchronuzedNames.get(3));
-        new Thread(() ->
-                synchronuzedStudent(synchronuzedNames.get(4)));
-        synchronuzedStudent(synchronuzedNames.get(5));
+        new Thread(() -> {
+            synchronuzedStudent(synchronuzedNames.get(2));
+            synchronuzedStudent(synchronuzedNames.get(3));
+        }).start();
+
+        new Thread(() -> {
+            synchronuzedStudent(synchronuzedNames.get(4));
+            synchronuzedStudent(synchronuzedNames.get(5));
+        }).start();
         return synchronuzedNames;
     }
 
