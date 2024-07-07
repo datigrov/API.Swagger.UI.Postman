@@ -87,6 +87,26 @@ public class StudentService {
         return parallelStudents;
     }
 
+    public static void synchronuzedStudent(String name) {
+        synchronized (Student.class) {
+            System.out.println("Студент " +  name);
+        }
+    }
+
+    public List<String> printSynchronized() {
+        List<String> synchronuzedNames = studentRepository.findAll().stream().parallel()
+                .limit(6).map(Student::getName).toList();
+        synchronuzedStudent(synchronuzedNames.get(0));
+        synchronuzedStudent(synchronuzedNames.get(1));
+        new Thread(() ->
+                synchronuzedStudent(synchronuzedNames.get(2)));
+        synchronuzedStudent(synchronuzedNames.get(3));
+        new Thread(() ->
+                synchronuzedStudent(synchronuzedNames.get(4)));
+        synchronuzedStudent(synchronuzedNames.get(5));
+        return synchronuzedNames;
+    }
+
 
 }
 
