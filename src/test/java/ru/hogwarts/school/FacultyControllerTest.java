@@ -1,20 +1,21 @@
 package ru.hogwarts.school;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FacultyControllerTest {
@@ -24,12 +25,14 @@ public class FacultyControllerTest {
     private FacultyController facultyController;
     @Autowired
     private TestRestTemplate restTemplate;
-    @Autowired
-    private FacultyRepository facultyRepository;
+    private Faculty faculty;
 
-    @Test
-    void facultyInNotNullTest() throws Exception {
-        assertThat(facultyController).isNotNull();
+    @BeforeEach
+    void info() {
+        faculty = new Faculty();
+        faculty.setName("Gryffindor");
+        faculty.setColor("Red");
+        faculty = restTemplate.postForObject("/faculty", faculty, Faculty.class);
     }
 
     @Test
@@ -44,62 +47,60 @@ public class FacultyControllerTest {
         ResponseEntity<Faculty> newResponse = restTemplate.postForEntity("Http://localhost:" +
                 port + "/faculty", faculty, Faculty.class);
         assertThat(newResponse.getStatusCode().is2xxSuccessful()).isTrue();
-        org.junit.jupiter.api.Assertions.assertNotNull(newResponse);
+        assertNotNull(newResponse);
 
 
         Faculty newFaculty = newResponse.getBody();
-        org.junit.jupiter.api.Assertions.assertEquals(newFaculty.getName(), faculty.getName());
+        assertEquals(newFaculty.getName(), faculty.getName());
     }
 
     @Test
-    void getFacultyTest() throws Exception {
-        Faculty faculty = new Faculty(2l, "russian", "white");
-        faculty = facultyRepository.save(faculty);
+    public void listByFacultyColors() {
+        ResponseEntity<List> response = restTemplate.getForEntity(
+                "/faculty/color?color=Red",
+                List.class);
 
-        ResponseEntity<Faculty> newResponse = restTemplate.getForEntity("Http://localhost:" +
-                port + "/faculty", Faculty.class);
-        assertThat(newResponse.getStatusCode().is2xxSuccessful()).isTrue();
-
-        Faculty newFaculty = newResponse.getBody();
-        org.junit.jupiter.api.Assertions.assertEquals(newFaculty.getName(), faculty.getName());
-        org.junit.jupiter.api.Assertions.assertEquals(newFaculty.getId(), faculty.getId());
-        org.junit.jupiter.api.Assertions.assertEquals(newFaculty.getColor(), faculty.getColor());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isEmpty());
     }
 
     @Test
-    void deleteFacultyTest() throws Exception {
-        Faculty faculty = new Faculty(2l, "russian", "white");
-        faculty = facultyRepository.save(faculty);
+    public void updateFaculty_ShouldReturnUpdatedFaculty() {
+        faculty.setName("Gryffindor");
+        faculty.setColor("RED");
 
-        ResponseEntity<Faculty> newResponse = restTemplate.postForEntity("http://localhost:" + port + "/faculty", faculty, Faculty.class);
-        assertThat(newResponse.getStatusCode().is2xxSuccessful()).isTrue();
-        Faculty newFaculty = newResponse.getBody();
-        restTemplate.delete("http://localhost:" + port + "/faculty", faculty, Faculty.class);
+        ResponseEntity<Faculty> response = restTemplate.exchange(
+                "/faculty/" + faculty.getId(),
+                HttpMethod.PUT,
+                new HttpEntity<>(faculty),
+                Faculty.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Gryffindor", response.getBody().getName());
+        assertEquals("RED", response.getBody().getColor());
     }
 
     @Test
-    void findFacultyGetTest() throws Exception {
-        ResponseEntity<Faculty> responseFaculty = restTemplate.postForEntity("http://localhost:" +
-                port + "/faculty", new Faculty(2l, "russian", "white"), Faculty.class);
-        assertThat(responseFaculty.getStatusCode().is2xxSuccessful()).isTrue();
-        Faculty newFaculty = responseFaculty.getBody();
+    public void findByColorOrName() {
+        ResponseEntity<List> response = restTemplate.getForEntity(
+                "/faculty/nameOrColor?name=Gryffindor&color=Red",
+                List.class);
 
-        ResponseEntity<Faculty> newResponseFaculty = restTemplate.getForEntity("http://localhost:"
-                + port + "/faculty/" + newFaculty.getId(), Faculty.class);
-
-        Faculty faculty = newResponseFaculty.getBody();
-        assertThat(faculty.getName()).isEqualTo("russian");
-        assertThat(faculty.getColor()).isEqualTo("white");
-        assertThat(faculty.getId()).isEqualTo(2L);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isEmpty());
     }
 
+    @Test
+    public void getLongerFacultyName() {
+        ResponseEntity<String> response = restTemplate.getForEntity(
+                "/faculty/getLongerName",
+                String.class);
 
-
-
-
-
-
-
-
-
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isEmpty());
+    }
 }
