@@ -1,10 +1,12 @@
 package ru.hogwarts.school;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApiSwaggerPostmanApplication {
+@OpenAPIDefinition
+public class  DemoApiSwaggerPostmanApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApiSwaggerPostmanApplication.class, args);
